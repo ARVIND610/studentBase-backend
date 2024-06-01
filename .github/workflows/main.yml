@@ -17,9 +17,20 @@ jobs:
 
       - name: build
         run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
+      - name: Write GCP service account key to file
+        run: echo "${{ secrets.GCP_KEY }}" > $HOME/gcloud-key.json
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          service_account_key: ${{ secrets.GCP_KEY }}
+          export_default_credentials: true
+      - name: Deploy to Google Cloud
+        run: |
+          gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+          gcloud config set project studentbase-v1 
 
       - name: auth
-        run: gcloud auth activate-service-account runners@studentbase-v1.iam.gserviceaccount.com --key-file= --project=studentbase-v1
+        run: gcloud auth activate-service-account runners@studentbase-v1.iam.gserviceaccount.com --key-file=$HOME/gcloud-key.json --project=studentbase-v1
       - name: push
         run: docker push us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest
 
