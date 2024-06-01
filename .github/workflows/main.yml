@@ -17,14 +17,19 @@ jobs:
 
       - name: build
         run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
-      - name: Write GCP service account key to file
-        run: echo "${{ secrets.GCP_KEY }}" > $HOME/gcloud-key.json
-      - name: Debug - Print the service account key file
-        run: cat $HOME/gcloud-key.json
+
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Decode and write GCP service account key to file
+        run: echo "${{ secrets.GCP_KEY }}" | jq '.' > $HOME/gcloud-key.json
+
       - name: Validate JSON format
         run: |
           cat $HOME/gcloud-key.json
-          python -m json.tool < $HOME/gcloud-key.json > /dev/null
+         #  python -m json.tool < $HOME/gcloud-key.json > /dev/null
+
       - name: Deploy to Google Cloud
         run: |
           gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
