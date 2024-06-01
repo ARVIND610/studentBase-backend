@@ -1,0 +1,25 @@
+name: Maven Deploy
+
+on:
+  push:
+    branches:
+      - main 
+      - new # Trigger the workflow on pushes to the main branch
+
+jobs:
+  deploy:
+    name: Deploy to Maven Repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: build
+        run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
+
+      - name: push
+        run: docker push us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest
+
+      - name: deploy
+        run: kubectl apply -f ./scripts/deploy.yml
