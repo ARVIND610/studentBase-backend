@@ -18,8 +18,7 @@ jobs:
       - name: build
         run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
 
-
-     - name: Decode and write GCP service account key to file
+      - name: Decode and write GCP service account key to file
         env:
           GCP_SERVICE_ACCOUNT_KEY: ${{ env.GCP_SERVICE_ACCOUNT_KEY }}
         run: echo "$GCP_SERVICE_ACCOUNT_KEY"  > $HOME/gcloud-key.json
@@ -32,3 +31,4 @@ jobs:
 
       - name: deploy
         run: kubectl apply -f ./scripts/deploy.yml
+
