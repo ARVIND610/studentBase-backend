@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GCP_SERVICE_ACCOUNT_KEY: ${{ env.GCP_SERVICE_ACCOUNT_KEY }} # Define the environment variable here
+      GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }} # Define the environment variable using secrets
 
     steps:
       - name: Check out repository
