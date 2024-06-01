@@ -18,6 +18,8 @@ jobs:
       - name: build
         run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
 
+      - name: auth
+        run: gcloud auth activate-service-account runners@studentbase-v1.iam.gserviceaccount.com --key-file= --project=studentbase-v1
       - name: push
         run: docker push us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest
 
