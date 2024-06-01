@@ -23,12 +23,11 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: Decode and write GCP service account key to file
-        run: echo "${{ secrets.GCP_KEY }}" | jq '.' > $HOME/gcloud-key.json
+        run: echo "${{ secrets.NEW_KEY }}" > $HOME/gcloud-key.json
 
       - name: Validate JSON format
         run: |
           cat $HOME/gcloud-key.json
-         #  python -m json.tool < $HOME/gcloud-key.json > /dev/null
 
       - name: Deploy to Google Cloud
         run: |
