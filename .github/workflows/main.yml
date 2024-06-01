@@ -11,6 +11,9 @@ jobs:
     name: Deploy to Maven Repository
     runs-on: ubuntu-latest
 
+    env:
+      GCP_SERVICE_ACCOUNT_KEY: ${{ env.GCP_SERVICE_ACCOUNT_KEY }} # Define the environment variable here
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -19,12 +22,11 @@ jobs:
         run: docker build -t us-central1-docker.pkg.dev/studentbase-v1/studentbase/backend:latest .
 
       - name: Decode and write GCP service account key to file
-        env:
-          GCP_SERVICE_ACCOUNT_KEY: ${{ env.GCP_SERVICE_ACCOUNT_KEY }}
         run: |
-           echo "$GCP_SERVICE_ACCOUNT_KEY" > /home/runner/gcloud-key.json
-           echo "$GCP_SERVICE_ACCOUNT_KEY"
-           cat /home/runner/gcloud-key.json
+          echo "$GCP_SERVICE_ACCOUNT_KEY" > /home/runner/gcloud-key.json
+          echo "$GCP_SERVICE_ACCOUNT_KEY"
+          cat /home/runner/gcloud-key.json
+        shell: /usr/bin/bash -e {0}
 
       - name: auth
         run: gcloud auth activate-service-account runners@studentbase-v1.iam.gserviceaccount.com --key-file=/home/runner/gcloud-key.json --project=studentbase-v1
